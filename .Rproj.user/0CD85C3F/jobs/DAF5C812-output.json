@@ -1,0 +1,7 @@
+[1,"Installing 'writexl' ...\n"]
+[2,"Installing package into ‘/Users/hoda_m/Library/R/x86_64/4.2/library’\n(as ‘lib’ is unspecified)\n"]
+[2,"trying URL 'https://cran.rstudio.com/bin/macosx/contrib/4.2/writexl_1.4.2.tgz'\n"]
+[2,"Content type 'application/x-gzip' length 457891 bytes (447 KB)\n============================"]
+[1,"The downloaded binary packages are in\n"]
+[1,"\t/var/folders/bw/tsn4ynyn1blgdl_jny75bdv00000gn/T//RtmpwVbTQ3/downloaded_packages\n"]
+[2,"======================\ndownloaded 447 KB\n\n\n\n✔ Package 'writexl' successfully installed.\n"]
