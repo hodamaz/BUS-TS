@@ -1,7 +1,7 @@
 ## README
 
 A personal repository for learning to work with git within R
-Additionally thie repo is an effort to larn time series with R through
+Additionally this repo is an effort to learn time series with R through
 an online course by Matt Dancho
 https://www.business-science.io
 
