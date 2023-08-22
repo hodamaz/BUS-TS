@@ -6,11 +6,11 @@ library(dplyr)
 library(lubridate)
 library(stringr)
 
-bike_orderlines_tbl <- read_rds("00_data/bike_sales/data_wrangled/bike_orderlines.rds")
+bike_orderlines_tbl <- read_rds("~/Desktop/desktop/R/Bus_science/M1/DS4B_101_R_Business_Analysis/00_data/bike_sales/data_wrangled/bike_orderlines.rds")
 
 bike_orderlines_tbl
 
-bikes_tbl <- readxl::read_excel("00_data/bike_sales/data_raw/bikes.xlsx")
+bikes_tbl <- readxl::read_excel("~/Desktop/desktop/R/Bus_science/M1/DS4B_101_R_Business_Analysis/00_data/bike_sales/data_raw/bikes.xlsx")
 
 bikes_tbl
 
@@ -27,10 +27,13 @@ c("Supersix Evo Black Inc.", "Supersix Evo Hi-Mod Team") %>%
 # Tibble (approach doing with tible) (This is part of feature engineering)
 bikes_tbl %>% 
     select(model) %>% 
-    mutate(supersix = model %>% str_detect("Supersix") %>% 
+    mutate(supersix = model %>% str_detect("Supersix") %>% # flagged
                as.numeric()) %>% 
     mutate(black = model %>% str_detect("Black") %>%  as.numeric())  
     
+bikes_tbl %>% 
+  select(model) %>% 
+  mutate(red = model %>% str_detect(pattern = 'Red') %>% as.numeric()) %>% view()
 # 1.2 Case & Concatenation ----
 
 

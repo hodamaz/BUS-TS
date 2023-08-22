@@ -206,7 +206,7 @@ bike_sales_m_tbl %>%
 bike_sales_m_tbl %>% 
     
     mutate(roll_mean_3 = rollmean(sales, k = 3, 
-                                  na.pad = TRUE, align = "right", fill = 0)) %>% 
+                                  na.pad = TRUE, align = "right ", fill = 0)) %>% 
     mutate(roll_mean_6 = rollmean(sales, k = 6, 
                                   na.pad = TRUE, align = "right", fill = 0))
 

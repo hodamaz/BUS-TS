@@ -5,3 +5,5 @@ Additionally this repo is an effort to learn time series with R through
 an online course by Matt Dancho
 https://www.business-science.io
 
+
+Update: Functional programming on hault to learn feature engineering 
