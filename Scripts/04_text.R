@@ -137,9 +137,56 @@ bikes_tbl %>%
   select(model) %>% 
   #fix a typo
   mutate(model = case_when(
-    model == 'CAAD Disc Ultegra' ~ 'CAAD12 Disc Ultegra',
+    model == 'CAAD Disc Ultegra'    ~ 'CAAD12 Disc Ultegra',
+    model == 'Syapse Carbon Tiagra' ~ 'Synapse Carbon Tiagra',
+    model == 'Hi-Mod Utegra' ~ 'Hi-Mod Ultegra',
     TRUE ~ model
   )) %>% 
+  
+  # Separate using spaces
+  separate(col = model, 
+           into = str_c('model_', 1:7), # all features have been broken out, str_c() for col names
+           sep = ' ', remove = FALSE, 
+           fill = 'right', extra = 'drop') %>%  # Fill: anything to the right of the columns is gonna be filled with NAs
+  
+  mutate(model_base = case_when(
+    # fix Supersix Evo
+    # detect (supersix) ~ combine (model_1 , model_2, sep = ' ')
+    str_detect(str_to_lower(model_1), 'supersix') ~ str_c(model_1, model_2, sep = ' '),
+    
+    # fix fat cadd 
+    str_detect(str_to_lower(model_1), 'fat') ~ str_c(model_1, model_2, sep = ' '),
+    
+    # fix beast of the east
+    str_detect(str_to_lower(model_1), 'beast') ~ str_c(model_1, model_2, model_3, model_4, sep = ' '),
+    
+    # fix bad habbit
+    str_detect(str_to_lower(model_1), 'bad') ~ str_c(model_1, model_2, sep = ' '),
+    
+    # fix bad Scalpel
+    str_detect(str_to_lower(model_2), '29') ~ str_c(model_1, model_2, sep = ' '),
+    
+    # catch all
+    TRUE ~ model_1
+  )) %>% 
+  # Get 'tier' feature
+  mutate(model_tier = model %>% str_replace(model_base, '') %>% str_trim()) %>% 
+  
+  # remove un-neccessary columns
+  select(- matches('[0-9]')) %>%  # matches() let's you use 'regex', any column with numbers is eliminated
+  
+  # Create flags
+  mutate(
+    # detect black in tier %>% numeric flag
+    black    = model_tier %>% str_to_lower() %>% str_detect("black") %>%  as.numeric(),
+    hi_mode  = model_tier %>% str_to_lower() %>% str_detect('hi-mod') %>%  as.numeric(),
+    team     = model_tier %>% str_to_lower() %>% str_detect('team') %>%  as.numeric(),
+    red      = model_tier %>% str_to_lower() %>% str_detect('red') %>%  as.numeric(),
+    ultegra  = model_tier %>% str_to_lower() %>% str_detect('ultegra') %>%  as.numeric(),
+    dura_ace = model_tier %>% str_to_lower() %>% str_detect('dura ace') %>%  as.numeric(),
+    disk     = model_tier %>% str_to_lower() %>% str_detect('disk') %>%  as.numeric()
+    ) %>% 
+  
   view()
 
 
