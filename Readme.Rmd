@@ -6,4 +6,6 @@ an online course by Matt Dancho
 https://www.business-science.io
 
 
-Update: Functional programming on hault to learn feature engineering 
+Update-1: Functional programming on halt to learn feature engineering. 
+Update-2: 05-categorical_data.R working with categorical variables with forcats package. 
+
