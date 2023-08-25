@@ -184,7 +184,7 @@ bikes_tbl %>%
     red      = model_tier %>% str_to_lower() %>% str_detect('red') %>%  as.numeric(),
     ultegra  = model_tier %>% str_to_lower() %>% str_detect('ultegra') %>%  as.numeric(),
     dura_ace = model_tier %>% str_to_lower() %>% str_detect('dura ace') %>%  as.numeric(),
-    disk     = model_tier %>% str_to_lower() %>% str_detect('disk') %>%  as.numeric()
+    disc     = model_tier %>% str_to_lower() %>% str_detect('disc') %>%  as.numeric()
     ) %>% 
   
   view()
