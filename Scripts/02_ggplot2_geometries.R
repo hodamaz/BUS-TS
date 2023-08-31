@@ -168,9 +168,14 @@ bike_orderline_per_year %>%
   geom_smooth(method = 'lm', se = FALSE) +
   
   geom_label(aes(label = scales::dollar(revenue, scale = 1e-6, suffix = 'M')),
-             vjust = -0.5)+
+             vjust = -0.5,
+             size = 5)+
   geom_label(label = "Major demand this year",
-             vjust = -1.8,
+             vjust = -4,
+             size = 4,
+             fontface = 'italic',
+             fill = '#1f78b4',
+             color = 'white',
              data = bike_orderline_per_year %>% 
                filter(year %in% c('2013', '2015')))+
   
