@@ -74,9 +74,25 @@ glimpse(bike_orderlines_tbl)
 _What does this tell us about a time of year to focus marketing efforts?_
 
 ```{r}
+bike_sales_m_tbl <- bike_orderlines_tbl %>% 
+  select(order_date, total_price) %>% 
+  
+  mutate(order_date = ymd(order_date)) %>% 
+  mutate(year = year(order_date),
+         month = month(order_date, label = TRUE, abbr = F)) %>% 
+  
+  group_by(month) %>% 
+  summarize(sales = sum(total_price)) %>% 
+  
+  arrange(month) %>%   
+  mutate(sales = sales %>% scales::dollar()) %>% 
 
+  rename(
+    Month = month,
+    Sales = sales
+  )
 
-
+bike_sales_m_tbl
 ```
 
 
@@ -93,9 +109,20 @@ _What does this tell us about a time of year to focus marketing efforts?_
 Evaluate "Black Inc". _What does this tell us about the "Black Inc" feature?_
 
 ```{r}
+bike_orderlines_tbl %>% 
+  select(model, total_price) %>% 
+  mutate(option_detected = model %>% str_to_lower() %>% str_detect('black inc')) %>% 
+  
+  group_by(option_detected) %>% 
+  summarise(
+    median_price = median(total_price)
+  ) %>% 
+  mutate(median_price = median_price %>% scales::dollar(largest_with_cents = 10)) %>% 
+  
+  rename(`Black INC` = option_detected,
+         `Median Orderline` = median_price)
+    
 
-    
-    
 ```
 
 Evaluate "Ultegra". _What does this tell us about the "Ultegra" feature?_
