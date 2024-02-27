@@ -109,7 +109,7 @@ bike_sales_m_tbl
 Evaluate "Black Inc". _What does this tell us about the "Black Inc" feature?_
 
 ```{r}
-bike_orderlines_tbl %>% 
+black_inc <- bike_orderlines_tbl %>% 
   select(model, total_price) %>% 
   mutate(option_detected = model %>% str_to_lower() %>% str_detect('black inc')) %>% 
   
@@ -128,7 +128,18 @@ bike_orderlines_tbl %>%
 Evaluate "Ultegra". _What does this tell us about the "Ultegra" feature?_
 
 ```{r}
-
+ultegra <- bike_orderlines_tbl %>% 
+  select(model, total_price) %>% 
+  mutate(option_detected = model %>% str_to_lower() %>% str_detect('ultegra')) %>% 
+  
+  group_by(option_detected) %>% 
+  summarise(
+    median_price = median(total_price)
+  ) %>% 
+  mutate(median_price = median_price %>% scales::dollar(largest_with_cents = 10)) %>% 
+  
+  rename(`Ultegra` = option_detected,
+         `Median Orderline` = median_price)
     
     
 ```
@@ -137,10 +148,29 @@ Evaluate "Ultegra". _What does this tell us about the "Ultegra" feature?_
 Evaluate "Disc" option. _What does this tell us about the "Disc" feature?_
 
 ```{r}
-
+Disc <- bike_orderlines_tbl %>% 
+  select(model, total_price) %>% 
+  mutate(option_detected = model %>% str_to_lower() %>% str_detect('disc')) %>% 
+  
+  group_by(option_detected) %>% 
+  summarise(
+    median_price = median(total_price)
+  ) %>% 
+  mutate(median_price = median_price %>% scales::dollar(largest_with_cents = 10)) %>% 
+  
+  rename(`Disc` = option_detected,
+         `Median Orderline` = median_price)
 
 ```
+Visualize "Features: Black Inc, Ultegra, and Disc for comparison. _Which has the highest Median? _
 
+```{r}
+black_inc
+ultegra
+Disc
+features_tbl
+  
+```
 
 # stringr: What are the average, min, and max prices by Base Model? (Difficulty = High)
 
@@ -159,7 +189,64 @@ _What does this tell us about how bikes are priced?_
 
 ```{r}
 
+bike_orderlines_tbl %>% 
+  
+  distinct(category_1, category_2, model, price) %>% 
  
+  # create feature/tier columns
+  separate(col = model, 
+           into = str_c('model_', 1:6), 
+           sep = ' ', 
+           remove = FALSE, 
+           fill = 'right',
+           extra = 'drop') %>% 
+  
+  # Create a base_model
+  mutate(model_base = case_when(
+    
+    # fix caad
+    str_detect(str_to_lower(model_1), 'caad') ~ 'CAAD12',
+    
+    # fix synaps
+    str_detect(str_to_lower(model_1), 'syapse') ~ 'Synapse',
+    
+    # fix supersix
+    str_detect(str_to_lower(model_1), 'supersix') ~ str_c(model_1, model_2, sep = ' '),
+    
+    # fix Fat CAAD 
+    str_detect(str_to_lower(model_1), 'fat') ~ str_c(model_1, model_2, sep = ' '),
+    
+    # fix Beast of the East
+    str_detect(str_to_lower(model_1), 'beast') ~ str_c(model_1, model_2, model_3, model_4, sep = ' '),
+    
+    # fix bad habbit
+    str_detect(str_to_lower(model_1), 'bad') ~ str_c(model_1, model_2, sep = ' '),
+    
+    # Fix Scalpel
+    str_detect(str_to_lower(model_1), 'scalpel') ~ str_c(model_1, model_2, sep = ' '),
+    
+    #Catch all
+    TRUE ~ model_1)) %>% 
+    
+    # Get Tier  feature
+    mutate(model_tier = model %>% str_replace(model_base, replacement = '') %>% str_trim()) %>% 
+  
+    # Remove unnecessary columns
+    select(- matches("model_[0-9]")) %>% 
+  
+    # Group By
+    group_by(category_1, category_2, model_base) %>% 
+    
+    # Summarise
+    summarise(mean_price = mean(price),
+              min_price = min(price),
+              max_price = max(price)) %>% 
+  
+    mutate(mean_price = mean_price %>% scales::dollar(largest_with_cents = 10)) %>% 
+    mutate(min_price  = min_price %>% scales::dollar(largest_with_cents = 10)) %>% 
+    mutate(max_price  = max_price %>% scales::dollar(largest_with_cents = 10))
+
+  
 ```
 
 

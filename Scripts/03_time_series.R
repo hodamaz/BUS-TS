@@ -111,7 +111,7 @@ bike_sales_m_tbl <- bike_orderlines_tbl %>%
 bike_sales_m_tbl
 
 # Floor Date 
-bike_orderlines_tbl %>% 
+year_month_sales <- bike_orderlines_tbl %>% 
     select(order_date, total_price) %>% 
     
     # lubridate
